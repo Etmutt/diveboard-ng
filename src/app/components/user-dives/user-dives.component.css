@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+app-dive-card {
+  flex-grow: 2; /* default 0 */
+  margin: 1em;
+}

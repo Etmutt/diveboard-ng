@@ -1,0 +1,30 @@
+<!--
+    <mat-toolbar color="primary" class="app-header">
+  <!-- tool bar ; always on (login or change between main section )
+  <div><a href="https://www.diveboard.com" target="_blank" class="title_app">Diveboard</a></div>
+  <span class="nav-tool-items">
+    <a class="nav-tool-item" mat-button mat-raised-button routerLink="Home" routerLinkActive="active">Home</a>
+    <a class="nav-tool-item" mat-button mat-raised-button routerLink="Explore" routerLinkActive="active">Explore</a>
+    <a class="nav-tool-item" mat-button mat-raised-button routerLink="Species" routerLinkActive="active">Species</a>
+  </span>
+
+
+ collapsable menu; diplayed only if logged in-->
+<!-- for later use : collapse button
+    <button mat-icon-button>
+    <button mat-icon-button aria-label="Example icon-button with a heart icon">
+      <mat-animated-icon start="menu" end="close" colorStart="none" colorEnd="none" [animate]="animate"></mat-animated-icon>
+    </button>
+  </button>
+  <app-dive-card [diveID]="diveID_p"> </app-dive-card>
+
+
+    <app-dive-edit> </app-dive-edit>
+  <app-login> </app-login>
+  <app-my-dives> </app-my-dives>
+
+</mat-toolbar>-->
+
+<app-main-nav>
+  <router-outlet></router-outlet>
+</app-main-nav>

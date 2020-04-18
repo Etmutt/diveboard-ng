@@ -1,0 +1,41 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    [ngClass]="{ hidden: !this.show_menu }"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>User name & pict </mat-toolbar>
+    <mat-nav-list>
+      <!-- User menu (interacting on its own log book)-->
+      <a mat-list-item href="#">Home</a>
+      <a mat-list-item routerLink="/user_dive" routerLinkActive="active"
+        >My Dives</a
+      >
+      <a mat-list-item href="#">My Gallery</a>
+      <a mat-list-item href="#">My Buddies</a>
+      <a mat-list-item href="#">Stat</a>
+      <a mat-list-item href="#">Logbook</a>
+
+      <a mat-list-item (click)="logout()">Logout</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content [ngClass]="{ no_marg: !this.show_menu }">
+    <mat-toolbar class="main">
+      <button
+        *ngIf="this.show_menu && (isHandset$ | async)"
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Diveboard.com</span>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

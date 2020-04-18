@@ -1,0 +1,18 @@
+<mat-card
+  *ngIf="dive"
+  class="dive-card"
+  [routerLink]="['/dive', this.dive.id]"
+  matRipple
+>
+  <img matRipple mat-card-image src="{{ this.dive.thumbnail_image_url }} " />
+  <mat-card-header>
+    <div mat-card-avatar class="avatarImage">
+      <div>{{ this.dive.number }}</div>
+    </div>
+    <mat-card-title>{{ this.dive.date | date }} </mat-card-title>
+    <mat-card-subtitle
+      >{{ this.dive.duration }} minutes /
+      {{ this.dive.maxdepth }} m</mat-card-subtitle
+    >
+  </mat-card-header>
+</mat-card>

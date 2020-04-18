@@ -1,0 +1,32 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.sidenav .mat-toolbar {
+  background: white;
+}
+
+.main {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0.4em 0em;
+  box-shadow: 5px 0px 5px grey;
+}
+
+.mat-toolbar {
+  max-height: 2.5em;
+}
+
+.hidden {
+  display: none;
+  background: rgb(156, 46, 46) !important;
+}
+
+.no_marg {
+  margin-left: 0px !important;
+}

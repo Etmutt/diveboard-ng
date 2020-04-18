@@ -1,0 +1,211 @@
+<div class="container" *ngIf="dive$ | async as dive; else loading">
+  <mat-progress-bar
+    *ngIf="this.loading_save"
+    mode="indeterminate"
+  ></mat-progress-bar>
+
+  <!-- dive save or interaction-->
+  <button
+    [disabled]="this.loading_save"
+    mat-fab
+    aria-label="Save"
+    class="fixed"
+    (click)="this.send()"
+  >
+    <mat-icon>save</mat-icon>
+  </button>
+
+  <form [formGroup]="diveForm">
+    <!-- Dive edit 1st card -->
+    <div class="header">
+      <mat-card class="half_header_card">
+        <mat-datepicker-toggle matSuffix [for]="picker_d">
+          <mat-icon class="icon_header" matDatepickerToggleIcon>event</mat-icon>
+        </mat-datepicker-toggle>
+
+        <mat-form-field class="field">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker_d" formControlName="date" />
+          <mat-datepicker touchUi #picker_d></mat-datepicker>
+        </mat-form-field>
+      </mat-card>
+
+      <mat-card class="half_header_card">
+        <mat-icon class="icon_header">access_time</mat-icon>
+        TODO
+      </mat-card>
+
+      <mat-card class="header_card">
+        <mat-icon>my_location</mat-icon>
+        TODO
+      </mat-card>
+    </div>
+
+    <!--first card with chart; location and Main info-->
+    <mat-card class="overview">
+      <!-- show dive chart ; if any ; location otherwise-->
+      <app-dive-chart class="chart" [diveID]="this.diveID"></app-dive-chart>
+      <!-- show dive main info-->
+      <div class="sumup">
+        <!-- show dive main info-->
+        <div class="side_overview">
+          <mat-form-field class="side_small">
+            <mat-label>Duration</mat-label>
+            <input matInput type="number" formControlName="duration" />
+            <span matSuffix>min</span>
+          </mat-form-field>
+
+          <mat-form-field class="side_small">
+            <mat-label>Depth</mat-label>
+            <input type="number" matInput formControlName="maxdepth" />
+            <span matSuffix>m</span>
+          </mat-form-field>
+
+          <!-- show dive buddies -->
+          <div class="side_field">
+            <app-chips-buddies formControlName="buddies"> </app-chips-buddies>
+          </div>
+        </div>
+        <!-- dive can be confirmed or unconfirmed by buddies-->
+      </div>
+    </mat-card>
+    <!--third part with details with dive detail-->
+    <div class="expansion">
+      <mat-accordion>
+        <!-- Standard info on the dive -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>timeline</mat-icon>
+              &nbsp; Detailed stats
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <mat-label>Altitude</mat-label>
+            <input matInput type="number" formControlName="altitude" />
+            <span matSuffix>m</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Surface Interval</mat-label>
+            <input matInput type="number" formControlName="surface_interval" />
+            <span matSuffix>h</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Weigth</mat-label>
+            <input matInput type="number" formControlName="weights" />
+            <span matSuffix>kg</span>
+          </mat-form-field>
+
+          <mat-button-toggle-group
+            name="water"
+            aria-label="Font Style"
+            formControlName="water"
+          >
+            <mat-button-toggle value="salt">Salty water</mat-button-toggle>
+            <mat-button-toggle value="fresh">Fresh water</mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <mat-slide-toggle formControlName="privacy">Private</mat-slide-toggle>
+          <mat-slide-toggle formControlName="favorite"
+            >Favorite</mat-slide-toggle
+          >
+
+          <mat-form-field>
+            <mat-label>Trip name</mat-label>
+            <input matInput formControlName="trip_name" />
+          </mat-form-field>
+
+          <div>
+            <mat-label>Current</mat-label>
+            <mat-slider
+              max="5"
+              min="0"
+              step="1"
+              thumbLabel="true"
+              formControlName="current"
+            >
+            </mat-slider>
+          </div>
+
+          <div>
+            <mat-label>Visibility</mat-label>
+            <mat-slider
+              max="5"
+              min="0"
+              step="1"
+              thumbLabel="true"
+              formControlName="visibility"
+            >
+            </mat-slider>
+          </div>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Public notes</mat-label>
+            <textarea matInput formControlName="public_notes"></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Guide</mat-label>
+            <input matInput formControlName="guide" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Temp bottom</mat-label>
+            <input matInput type="number" formControlName="temp_bottom" />
+            <span matSuffix>°C</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Temp surface</mat-label>
+            <input matInput type="number" formControlName="temp_surface" />
+            <span matSuffix>°C</span>
+          </mat-form-field>
+
+          <!-- show dive tag -->
+          <app-chips-dive-tag formControlName="divetype"> </app-chips-dive-tag>
+
+          <!--//safetystops: number[ [string, number] ] ​
+            //shop: null
+            //species: Array []
+            //gears: number [];
+            //dive_gears: number[];
+            //user_gears: Array [] -->
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>emoji_nature</mat-icon>
+              &nbsp; Species
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>devices_other</mat-icon>
+              &nbsp; Gear
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <!-- show my dive media (pictures etc) ; if any -->
+
+    <!-- show my buddies media; if any -->
+  </form>
+</div>
+
+<ng-template #loading>
+  Loading Dive...
+</ng-template>

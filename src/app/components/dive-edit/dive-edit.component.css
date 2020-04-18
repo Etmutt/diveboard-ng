@@ -1,0 +1,91 @@
+.container {
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.overview {
+  display: flex;
+  margin: 1em 2em 0em 2em;
+  flex-wrap: wrap;
+}
+
+.header {
+  padding: 1em 1em 0em 1em;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.header_card {
+  flex: 2 2 15em;
+  margin: 1em 1em 0em 1em;
+
+  text-align: middle;
+}
+
+.half_header_card {
+  flex: 1 1 7em;
+  margin: 1em 1em 0em 1em;
+  text-align: middle;
+}
+
+.field {
+  width: calc(100% - 4em);
+  height: 1em;
+}
+
+.icon_header {
+  transform: scale(1.5);
+  color: darkgray;
+}
+
+.fixed {
+  position: fixed;
+  right: 3em;
+  bottom: 3em;
+  z-index: 15;
+}
+
+.expansion {
+  padding: 1em 2em 4em 2em;
+}
+
+.chart {
+  flex: 2 2 20em;
+  height: 20em;
+  min-width: 70%;
+}
+
+.sumup {
+  flex: 1 1 10em;
+  padding: 2em;
+}
+
+.side_overview {
+  min-width: 5em;
+  flex: 0 0 16em;
+
+  justify-content: space-evenly;
+}
+
+.side_field {
+  margin: 0em 1em;
+  min-width: 14em;
+  max-width: 20em;
+  display: inline;
+}
+
+.side_small {
+  width: 6em;
+  margin: 0em 1em;
+}
+
+.avatarImage {
+  background-color: grey;
+  background-size: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

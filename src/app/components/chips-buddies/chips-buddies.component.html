@@ -1,0 +1,36 @@
+<ng-container [formGroup]="form" class="buddy">
+  <mat-form-field class="buddies-chip-list" class="buddy">
+    <mat-chip-list #chipList aria-label="Buddies" class="buddy">
+      <mat-chip
+        *ngFor="let buddy of this.buddies"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(buddy)"
+      >
+        {{ buddy.name }}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        class="buddy"
+        placeholder="Buddies"
+        #buddyInput
+        [formControl]="buddyCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option
+        *ngFor="let buddy of filteredBuddies | async"
+        [value]="buddy.name"
+      >
+        {{ buddy.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</ng-container>

@@ -1,0 +1,30 @@
+.dive-card {
+  max-width: 22em;
+  cursor: pointer;
+  margin: auto;
+}
+
+.cnt {
+  max-height: 10em;
+  overflow: hidden;
+}
+
+img {
+  object-fit: cover; /*this makes the image in src fit to the size specified below*/
+  max-height: 15em;
+}
+
+.avatarImage {
+  background-color: grey;
+  background-size: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatarImage div {
+  color: lightgray;
+  font-size: x-large;
+  font-weight: 800;
+  flex: 0 0 0px;
+}

@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="chart" *ngIf="!this.loading">
+    <canvas
+      ngChartjs
+      [datasets]="ChartData"
+      [labels]="ChartLabels"
+      [options]="ChartOptions"
+      [legend]="ChartLegend"
+      [chartType]="ChartType"
+      [colors]="ChartColor"
+    >
+    </canvas>
+  </div>
+
+  <div class="loading" *ngIf="this.loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

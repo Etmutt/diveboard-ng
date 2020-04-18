@@ -1,0 +1,11 @@
+<mat-toolbar>
+  <span>My dives</span>
+</mat-toolbar>
+
+<div *ngIf="this.user" class="container">
+  <app-dive-card
+    *ngFor="let diveID of this.user.all_dive_ids; index as i; first as isFirst"
+    [diveID]="diveID"
+  >
+  </app-dive-card>
+</div>

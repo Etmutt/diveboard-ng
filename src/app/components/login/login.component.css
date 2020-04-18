@@ -1,0 +1,64 @@
+.login-wrapper {
+  background-image: url(https://st4.diveboard.com/42094/82877_450d77bf5e5f487113ed2f99c8b30716_large.jpeg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 20em;
+  height: calc(100% - 3.6em);
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  position: relative;
+  top: 0;
+  opacity: 1;
+  float: left;
+  padding: 60px 50px 40px 50px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 10px;
+  transform: scale(1);
+  z-index: 5;
+  max-width: 330px;
+}
+
+form {
+  min-width: 100%;
+  max-width: 300px;
+  width: 100%;
+}
+
+.full-width,
+.btn-block {
+  width: 100%;
+}
+
+mat-card-header {
+  text-align: center;
+  width: 100%;
+  display: block;
+  font-weight: 700;
+}
+
+mat-card-header mat-card-title {
+  font-size: 30px;
+}
+
+.mat-card {
+  padding: 40px 70px 50px;
+}
+
+.mat-stroked-button {
+  border: 1px solid currentColor;
+  line-height: 54px;
+  background: #fff7fa;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  padding: 0.8375em 0;
+}
