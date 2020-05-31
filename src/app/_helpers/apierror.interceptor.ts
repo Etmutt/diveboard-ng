@@ -19,11 +19,12 @@ export class APIErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      // filter only response from api without success and  create error
+      // filter only response from api (not for search) without success and  create error
       map((event: HttpEvent<any>) => {
         if (
           event instanceof HttpResponse &&
           event.url.includes(environment.apiUrl) &&
+          !event.url.includes(`${environment.apiUrl}/search`) &&
           event.body &&
           !event.body.success
         ) {
@@ -31,7 +32,7 @@ export class APIErrorInterceptor implements HttpInterceptor {
             error: event.body.error_code || event.body.error_tag,
             headers: event.headers,
             status: 500,
-            statusText: event.body.error || event.body.message,
+            statusText: "API error" || event.body.error || event.body.message,
             url: event.url,
           });
         }

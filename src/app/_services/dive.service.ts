@@ -36,7 +36,6 @@ export class DiveService {
 
   // put dive
   public putDive(dive: Dive): Observable<any> {
-    console.log("testserv");
     const params = new HttpParams().set(
       "arg",
       JSON.stringify(DiveAdapter.trunc_write(dive))

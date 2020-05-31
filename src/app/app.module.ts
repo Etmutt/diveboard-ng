@@ -5,23 +5,30 @@ import { MaterialModule } from "./material.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { LoginComponent } from "./components/login/login.component";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { LayoutModule } from "@angular/cdk/layout";
+
+/** NPM install */
+
+import { AmazingTimePickerModule } from "amazing-time-picker";
+import { NgChartjsModule } from "ng-chartjs";
+
+/* internal component */
 import { APIErrorInterceptor } from "./_helpers/apierror.interceptor";
 import { HTTPErrorInterceptor } from "./_helpers/error.interceptor";
 import { JwtInterceptor } from "./_helpers/jwt.interceptor";
 import { DiveCardComponent } from "./components/dive-card/dive-card.component";
 import { DiveChartComponent } from "./components/dive-chart/dive-chart.component";
 import { MainNavComponent } from "./main-nav/main-nav.component";
-import { LayoutModule } from "@angular/cdk/layout";
+import { LoginComponent } from "./components/login/login.component";
 import { UserDivesComponent } from "./components/user-dives/user-dives.component";
-import { NgChartjsModule } from "ng-chartjs";
 import { DiveEditComponent } from "./components/dive-edit/dive-edit.component";
 import { ChipsBuddiesComponent } from "./components/chips-buddies/chips-buddies.component";
 import { ChipsDiveTagComponent } from "./components/chips-dive-tag/chips-dive-tag.component";
-import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { UploadComponent } from "./components/upload/upload.component";
+import { ManageLocationComponent } from "./components/manage-location/manage-location.component";
+import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 
 @NgModule({
   declarations: [
@@ -34,19 +41,21 @@ import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
     DiveEditComponent,
     ChipsBuddiesComponent,
     ChipsDiveTagComponent,
+    UploadComponent,
+    ManageLocationComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     LayoutModule,
     NgChartjsModule,
-    NgxMaterialTimepickerModule,
+    AmazingTimePickerModule,
+    LeafletModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -1,31 +1,41 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { DiveService } from "../../_services/dive.service";
 import { Dive } from "../../_models/dive.model";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { GalleryItem, ImageItem } from "@ngx-gallery/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-dive-card",
   templateUrl: "./dive-card.component.html",
   styleUrls: ["./dive-card.component.css"],
 })
-export class DiveCardComponent implements OnInit {
+export class DiveCardComponent implements OnInit, OnDestroy {
   @Input() diveID: number;
+  dive$: Observable<Dive>;
+  images: GalleryItem[];
 
-  dive: Dive;
-  constructor(private diveService: DiveService) {}
+  constructor(private diveService: DiveService, private router: Router) {}
 
   getdive(): void {
-    this.diveService.getDive(this.diveID).subscribe(
-      (data: Dive) => {
-        this.dive = data;
-      },
-      (error) => {
-        // this.error = error.statusText;
-      }
-    );
+    this.dive$ = this.diveService
+      .getDive(this.diveID)
+      .pipe(
+        tap(
+          (data) =>
+            (this.images = data.pictures.map(
+              (x) => new ImageItem({ src: x.medium, thumb: x.thumbnail })
+            ))
+        )
+      );
   }
 
   ngOnInit(): void {
     this.getdive();
-    //  console.log(this.dive)
+  }
+
+  ngOnDestroy() {
+    //this.dive$.unsubscribe();
   }
 }

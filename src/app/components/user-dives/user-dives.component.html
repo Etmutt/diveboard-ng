@@ -1,11 +1,22 @@
-<mat-toolbar>
+<!--<mat-toolbar>
   <span>My dives</span>
-</mat-toolbar>
+</mat-toolbar>-->
 
-<div *ngIf="this.user" class="container">
-  <app-dive-card
-    *ngFor="let diveID of this.user.all_dive_ids; index as i; first as isFirst"
-    [diveID]="diveID"
+<div *ngIf="this.user">
+  <mat-paginator
+    [length]="this.user.all_dive_ids.length"
+    [pageSize]="this.item_per_page"
+    [pageIndex]="this.page"
+    [pageSizeOptions]="[25, 50, 100, 200]"
+    (page)="this.paginate($event)"
   >
-  </app-dive-card>
+  </mat-paginator>
+
+  <div class="container">
+    <app-dive-card
+      *ngFor="let diveID of this.items_displayed; index as i; first as isFirst"
+      [diveID]="diveID"
+    >
+    </app-dive-card>
+  </div>
 </div>

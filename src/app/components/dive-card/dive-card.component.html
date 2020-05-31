@@ -1,18 +1,40 @@
 <mat-card
-  *ngIf="dive"
+  *ngIf="dive$ | async as dive"
   class="dive-card"
-  [routerLink]="['/dive', this.dive.id]"
+  [routerLink]="['/dive', dive.id]"
   matRipple
 >
-  <img matRipple mat-card-image src="{{ this.dive.thumbnail_image_url }} " />
-  <mat-card-header>
+  <img
+    *ngIf="dive.featured_picture; else chart"
+    matRipple
+    class="cnt"
+    mat-card-image
+    src="{{ dive.featured_picture.medium }} "
+  />
+
+  <ng-template #chart>
+    <!-- show dive chart ; if any ; location otherwise-->
+    <app-dive-chart
+      *ngIf="dive.profile_dan; else placeholder"
+      class="cnt"
+      [diveID]="this.diveID"
+    ></app-dive-chart>
+  </ng-template>
+
+  <ng-template #placeholder>
+    <!-- show dive chart ; if any ; location otherwise-->
+    <img class="cnt" mat-card-image src="assets/images/dive_place_holder.png" />
+  </ng-template>
+
+  <mat-card-header class="header">
     <div mat-card-avatar class="avatarImage">
-      <div>{{ this.dive.number }}</div>
+      <div>{{ dive.number }}</div>
     </div>
-    <mat-card-title>{{ this.dive.date | date }} </mat-card-title>
-    <mat-card-subtitle
-      >{{ this.dive.duration }} minutes /
-      {{ this.dive.maxdepth }} m</mat-card-subtitle
-    >
+    <mat-card-title
+      >{{ dive.spot.location_name }}, {{ dive.date | date }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ dive.duration }} minutes / {{ dive.maxdepth }} m
+    </mat-card-subtitle>
   </mat-card-header>
 </mat-card>

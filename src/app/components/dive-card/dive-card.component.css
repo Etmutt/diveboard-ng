@@ -1,17 +1,16 @@
 .dive-card {
-  max-width: 22em;
   cursor: pointer;
   margin: auto;
+  min-height: 15em;
+}
+
+.header {
+  padding: 1em;
 }
 
 .cnt {
-  max-height: 10em;
-  overflow: hidden;
-}
-
-img {
   object-fit: cover; /*this makes the image in src fit to the size specified below*/
-  max-height: 15em;
+  height: 22em;
 }
 
 .avatarImage {

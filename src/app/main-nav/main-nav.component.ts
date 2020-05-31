@@ -25,9 +25,8 @@ export class MainNavComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
-  ) //private titleService: Title
-  {}
+    private authService: AuthService //private titleService: Title
+  ) {}
 
   //handle side navigation display an content based on menu data passed as arg for each route
   ngOnInit() {

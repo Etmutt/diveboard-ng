@@ -1,3 +1,11 @@
 .buddy {
   width: 100%;
 }
+
+.btn_right {
+  float: right;
+}
+
+.email_ipt {
+  width: 100%;
+}

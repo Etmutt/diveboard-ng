@@ -1,26 +1,29 @@
 export class Spot {
   constructor(
-    id: number,
-    public shaken_id: string,
-    public country_name: string,
-    public country_code: string,
-    public country_flag_big: string,
-    public country_flag_small: string,
-    public within_country_bounds: boolean,
-    public region_name: string,
-    public location_name: string,
-    public permalink: string,
-    public fullpermalink: string,
-    public staticmap: string,
     public name: string,
     public lat: number,
-    public lng: number
+    public lng: number,
+    public id?: number,
+    public shaken_id?: string,
+    public country_name?: string,
+    public country_code?: string,
+    public country_flag_big?: string,
+    public country_flag_small?: string,
+    public within_country_bounds?: boolean,
+    public region_name?: string,
+    public location_name?: string,
+    public permalink?: string,
+    public fullpermalink?: string,
+    public staticmap?: string
   ) {}
 }
 
 export class SpotAdapter {
   static adapt(item: any): Spot {
     return new Spot(
+      item.name,
+      item.lat,
+      item.lng,
       item.id,
       item.shaken_id,
       item.country_name,
@@ -32,10 +35,7 @@ export class SpotAdapter {
       item.location_name,
       item.permalink,
       item.fullpermalink,
-      item.staticmap,
-      item.name,
-      item.lat,
-      item.lng
+      item.staticmap
     );
   }
 }

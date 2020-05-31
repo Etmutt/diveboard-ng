@@ -5,14 +5,9 @@
   background-repeat: no-repeat;
 }
 
-.overview {
-  display: flex;
-  margin: 1em 2em 0em 2em;
-  flex-wrap: wrap;
-}
-
+/*header with date and loc*/
 .header {
-  padding: 1em 1em 0em 1em;
+  padding: 1em 1% 0em 1%;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -20,15 +15,119 @@
 
 .header_card {
   flex: 2 2 15em;
-  margin: 1em 1em 0em 1em;
-
+  margin: 1em 1% 0em 1%;
+  padding: 0.5em;
   text-align: middle;
+  height: 3.5em;
+  overflow-y: hidden;
+  min-width: 25em;
 }
 
 .half_header_card {
   flex: 1 1 7em;
-  margin: 1em 1em 0em 1em;
+  margin: 1em 1% 0em 1%;
   text-align: middle;
+  padding: 0.5em;
+  height: 3.5em;
+}
+
+.header_field {
+  width: calc(100% - 4em);
+  height: 3em;
+  margin: 0;
+  float: right;
+}
+
+.icon_header {
+  color: darkgray;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+  padding-top: 0.4em !important;
+  transform: scale(1.2);
+}
+
+/*Gallery*/
+.gallery {
+  padding: 0;
+  margin: 1em 2% 0em 2%;
+  position: relative;
+  padding-top: 6%;
+}
+
+.gallery_cnt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/*first card with chart*/
+.overview {
+  display: flex;
+  margin: 1em 2% 0em 2%;
+  flex-wrap: wrap;
+}
+
+.chart {
+  flex: 2 2 20em;
+  min-height: 10em;
+  min-width: 60%;
+  position: relative;
+  padding-top: 6.25%; /* 16:9 Aspect Ratio */
+}
+
+.chart_cnt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.sumup {
+  flex: 1 1 10em;
+  padding: 1em 0em;
+  margin-left: 2%;
+}
+
+.sumup .side_overview {
+  min-width: 10em;
+  flex: 0 0 16em;
+}
+
+.sumup .buddy {
+  margin: 0em 1em;
+  min-width: 45%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /*min 50% -margin ; max 100%. break point at parent 20em*/
+  float: left;
+  min-width: calc(50% - 2em);
+  max-width: calc(100% - 2em);
+  width: calc((35em - 100%) * 40);
+}
+
+.sumup .side_small {
+  width: 6em;
+  margin: 0em 1em;
+  /*min 25% -margin ; max 50%. break point at parent 20em*/
+  float: left;
+  min-width: calc(25% - 2em);
+  max-width: calc(50% - 2em);
+  width: calc((35em - 100%) * 40);
+}
+
+.sumup .note {
+  margin: 0em 1em;
+  min-width: 5em;
+  width: calc(100% - 2em);
+  bottom: 0em;
+}
+
+/*first block of dive detail*/
+.expansion {
+  padding: 1em 2% 4em 2%;
 }
 
 .field {
@@ -36,56 +135,80 @@
   height: 1em;
 }
 
-.icon_header {
-  transform: scale(1.5);
-  color: darkgray;
+.inline_btn {
+  width: 6em;
+  float: right;
 }
 
-.fixed {
+.trip {
+  width: calc(100% - 14em);
+}
+
+/*2nd bock of dive detail*/
+.form_sub_cnt {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  margin: 2em 0em;
+}
+
+.form_sub_cnt .main_small_fld {
+  min-width: 6em;
+  width: calc(25% - 3em);
+  margin: 0.5em 1em;
+}
+
+.form_sub_cnt .main_big_fld {
+  min-width: 10em;
+  /*min 50% -margin ; max 100%. break point at parent 40em*/
+  float: left;
+  min-width: calc(50% - 2em);
+  max-width: calc(100% - 2em);
+  width: calc((40em - 100%) * 40);
+
+  margin: 0.5em 1em;
+}
+
+/*review block*/
+
+.review {
+  display: inline-block;
+  margin: 0em 1em 1em 1em;
+
+  /*min 25% -margin ; max 100%. break point at parent 40em*/
+
+  min-width: calc(33% - 2em);
+  max-width: calc(100% - 2em);
+  width: calc((40em - 100%) * 40);
+
+  margin: 0.5em 1em;
+}
+
+.slide_label {
+  margin-left: 1em;
+  color: rgb(110, 110, 110);
+  padding-bottom: -3em;
+}
+
+.slide {
+  margin-top: -0.5em;
+  width: 100%;
+}
+
+.fixed_btn {
   position: fixed;
-  right: 3em;
-  bottom: 3em;
+  right: 2%;
+  bottom: 2%;
+  width: 5em;
   z-index: 15;
 }
 
-.expansion {
-  padding: 1em 2em 4em 2em;
+.fixed_btn button {
+  margin: 1em;
 }
 
-.chart {
-  flex: 2 2 20em;
-  height: 20em;
-  min-width: 70%;
-}
-
-.sumup {
-  flex: 1 1 10em;
-  padding: 2em;
-}
-
-.side_overview {
-  min-width: 5em;
-  flex: 0 0 16em;
-
-  justify-content: space-evenly;
-}
-
-.side_field {
-  margin: 0em 1em;
-  min-width: 14em;
-  max-width: 20em;
-  display: inline;
-}
-
-.side_small {
-  width: 6em;
-  margin: 0em 1em;
-}
-
-.avatarImage {
-  background-color: grey;
-  background-size: inherit;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.load_bar {
+  position: fixed;
+  bottom: 0px;
+  z-index: 20;
 }

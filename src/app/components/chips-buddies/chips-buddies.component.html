@@ -25,12 +25,61 @@
       #auto="matAutocomplete"
       (optionSelected)="selected($event)"
     >
-      <mat-option
-        *ngFor="let buddy of filteredBuddies | async"
-        [value]="buddy.name"
-      >
+      <mat-option *ngFor="let buddy of this.searchedBuddies" [value]="buddy">
         {{ buddy.name }}
+      </mat-option>
+
+      <mat-option value="FB_overlay">
+        <mat-icon>share</mat-icon>
+        From facebook
+      </mat-option>
+      <mat-option value="MAIL_overlay">
+        <mat-icon>email</mat-icon>
+        Not there? Notify by email
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 </ng-container>
+
+<ng-template cdk-portal #FbOverlay="cdkPortal">
+  <mat-card>
+    Facebook Overlay - Under construction ; will be there very soon !
+  </mat-card>
+</ng-template>
+
+<ng-template cdk-portal #MailOverlay="cdkPortal">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar>
+        <mat-icon>email</mat-icon>
+      </div>
+      <mat-card-title>Notify your buddy and share your dive</mat-card-title>
+      <mat-card-subtitle>
+        Promise ; it will never be used for spam !
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="email_ipt">
+        <mat-label>Buddy's name</mat-label>
+        <input #nameMailInput matInput [(ngModel)]="nameEmailOverlay" />
+      </mat-form-field>
+      <mat-form-field class="email_ipt">
+        <mat-label>Buddy's email</mat-label>
+        <input
+          type="email"
+          #emailMailInput
+          matInput
+          [(ngModel)]="mailEmailOverlay"
+        />
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button class="btn_right" (click)="this.validateMail()">
+        VALIDATE
+      </button>
+      <button mat-button class="btn_right" (click)="this.closeOverlay()">
+        CANCEL
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

@@ -2,18 +2,21 @@ import {
   Component,
   ElementRef,
   ViewChild,
-  Input,
   OnInit,
   forwardRef,
   OnDestroy,
+  QueryList,
+  ViewChildren,
 } from "@angular/core";
-import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
+
+import { COMMA, ENTER} from "@angular/cdk/keycodes";
+
 import {
   MatAutocompleteSelectedEvent,
   MatAutocomplete,
 } from "@angular/material/autocomplete";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { Buddy } from "../../_models/buddy.model";
 import { SearchService } from "../../_services/search.service";
 import {
@@ -21,14 +24,30 @@ import {
   NG_VALUE_ACCESSOR,
   FormBuilder,
   FormGroup,
-  Validators,
   FormControl,
   NG_VALIDATORS,
 } from "@angular/forms";
-import { map, startWith } from "rxjs/operators";
+import {
+  map,
+  startWith,
+  filter,
+  tap,
+  switchMap,
+  debounceTime,
+  finalize,
+} from "rxjs/operators";
+
+import { Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortalDirective } from "@angular/cdk/portal";
+import { isUndefined } from "util";
 
 /*-----------------
-buddies form field ;with auto complete takes input of buddy[] as form control
+buddies form field ; with :
+- auto complete
+- mail addition for extranl user
+- facebook search (to be done)
+
+> Takes input of buddy[] as form control
 > Mimics normal angular form component behavior and can be used as is in any other form
 */
 
@@ -49,49 +68,62 @@ buddies form field ;with auto complete takes input of buddy[] as form control
     },
   ],
 })
-export class ChipsBuddiesComponent implements ControlValueAccessor, OnDestroy {
-  form: FormGroup;
+export class ChipsBuddiesComponent
+  implements ControlValueAccessor, OnInit, OnDestroy {
+  /*  BUDDY CHIP CONF */
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
+  form: FormGroup;
   buddyCtrl = new FormControl();
-  filteredBuddies: Observable<Buddy[]>;
+
+  /*  AUTO COMPLETE CONF */
+  searchedBuddies: any;
   subscriptions: Subscription[] = [];
   buddies: Buddy[];
-  allBuddies: Buddy[] = [
-    { name: "test-api connection to be done" },
-    { name: "test2" },
-  ];
-
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild("buddyInput") buddyInput: ElementRef<HTMLInputElement>;
   @ViewChild("auto") matAutocomplete: MatAutocomplete;
 
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
+  /* Facebook and mail overlay */
+  overlayRef: OverlayRef;
+  @ViewChild("FbOverlay") FbOverlay: TemplatePortalDirective;
+  @ViewChild("MailOverlay") MailOverlay: TemplatePortalDirective;
+  nameEmailOverlay: string = "";
+  mailEmailOverlay: string = "";
 
-  get value(): Buddy[] {
-    return this.buddies;
-  }
 
-  set value(value: Buddy[]) {
-    this.buddies = value;
-    this.onChange(value);
-    this.onTouched();
-  }
-
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private searchService: SearchService,
+    private overlay: Overlay
+  ) {
     //instance the form
     this.form = this.formBuilder.group({ buddyCtrl: "" });
-
-    //create an obs that filter the fixed autocomplet. to be replace by API
-    this.filteredBuddies = this.buddyCtrl.valueChanges.pipe(
-      startWith(null),
-      map((buddy: string | null) =>
-        buddy ? this._filter(buddy) : this.allBuddies
-      )
-    );
   }
 
+  /* subscribe to change of value in input and subscribe for auto complete*/
+  ngOnInit() {
+    this.buddyCtrl.valueChanges
+      .pipe(
+        debounceTime(200),
+        tap((value) => {
+          if (!(!isUndefined(value) && value !== null && value.length > 0)) {
+            this.searchedBuddies = [];
+          }
+        }),
+        filter((value) => value && value !== null && value.length > 0),
+        switchMap((value) =>
+          this.searchService.searchBuddy(value).pipe(finalize(() => {}))
+        )
+      )
+      .subscribe((data) => {
+        this.searchedBuddies = data.slice(1, 6);
+      });
+  }
+
+  /*add buddy NOT from autocomplete*/
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -100,7 +132,7 @@ export class ChipsBuddiesComponent implements ControlValueAccessor, OnDestroy {
     if ((value || "").trim()) {
       this.buddies.push({
         name: value.trim(),
-        db_id: null,
+        id: null,
         fb_id: null,
         email: "",
         picturl: "",
@@ -122,16 +154,96 @@ export class ChipsBuddiesComponent implements ControlValueAccessor, OnDestroy {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    //to be added : selected should push the whole buddy object; not only name
-    const test = new Buddy(event.option.viewValue);
-    this.buddies.push(new Buddy(event.option.viewValue));
-    this.buddyInput.nativeElement.value = "";
-    this.buddyCtrl.setValue(null);
+    //filter out facebook and email option
+    switch (event.option.value) {
+
+      case "FB_overlay":
+        this.openFbOverlay();
+        break;
+
+      case "MAIL_overlay":
+        this.openMailOverlay();
+        break;
+
+      default:
+        this.buddies.push(event.option.value);
+        this.buddyInput.nativeElement.value = "";
+        this.buddyCtrl.setValue(null);
+        break;
+    }
   }
 
-  private _filter(value: string): Buddy[] {
-    const filterValue = value.toLowerCase();
-    return this.allBuddies;
+  openFbOverlay() {
+    const positionStrategy = this.overlay
+      .position()
+      .global()
+      .centerHorizontally()
+      .height("300px")
+      .width("300px")
+      .centerVertically();
+
+    const overlayConfig = new OverlayConfig({
+      positionStrategy,
+    });
+
+    overlayConfig.hasBackdrop = true;
+
+    this.overlayRef = this.overlay.create(overlayConfig);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeOverlay();
+    });
+
+    this.overlayRef.attach(this.FbOverlay);
+  }
+
+  openMailOverlay() {
+    const positionStrategy = this.overlay
+      .position()
+      .global()
+      .centerHorizontally()
+      .centerVertically();
+
+      const overlayConfig = new OverlayConfig({
+        positionStrategy,
+        maxWidth : '100%',
+        maxHeight : '100%',
+        width :'40em',
+  
+      });
+    overlayConfig.hasBackdrop = true;
+
+    this.overlayRef = this.overlay.create(overlayConfig);
+
+    this.overlayRef.backdropClick().subscribe(() => {
+      this.closeOverlay();
+    });
+
+    this.overlayRef.attach(this.MailOverlay);
+
+    //inject name based on input
+    this.mailEmailOverlay = "";
+    this.nameEmailOverlay = this.buddyInput.nativeElement.value;
+  }
+
+  validateMail() {
+    this.buddies.push({
+      name: this.nameEmailOverlay,
+      id: null,
+      fb_id: null,
+      email: this.mailEmailOverlay,
+      picturl: "",
+    });
+    this.buddyInput.nativeElement.value = "";
+    this.buddyCtrl.setValue(null);
+
+    this.overlayRef.dispose();
+    this.buddyInput.nativeElement.focus();
+  }
+
+  closeOverlay() {
+    this.overlayRef.dispose();
+    this.buddyInput.nativeElement.focus();
   }
 
   ngOnDestroy() {
@@ -140,6 +252,17 @@ export class ChipsBuddiesComponent implements ControlValueAccessor, OnDestroy {
 
   onChange: any = () => {};
   onTouched: any = () => {};
+
+  get value(): Buddy[] {
+    return this.buddies;
+  }
+
+  set value(value: Buddy[]) {
+
+    this.buddies = value;
+    this.onChange(value);
+    this.onTouched();
+  }
 
   registerOnChange(fn) {
     this.onChange = fn;

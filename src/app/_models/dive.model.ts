@@ -1,5 +1,6 @@
 import { Buddy, BuddyAdapter } from "./buddy.model";
 import { Spot, SpotAdapter } from "./spot.model";
+import { Media, MediaAdapter } from "./media.model";
 
 export class Dive {
   constructor(
@@ -39,11 +40,14 @@ export class Dive {
     public thumbnail_image_url: string,
     public thumbnail_profile_url: string,
     public dive_reviews_overall,
-    public dive_review_difficulty,
-    public dive_review_marine,
-    public dive_review_wreck,
-    public dive_review_bigfish,
-    public number
+    public dive_reviews_difficulty,
+    public dive_reviews_marine,
+    public dive_reviews_wreck,
+    public dive_reviews_bigfish,
+    public number,
+    public featured_picture?: Media,
+    public pictures?: Media[],
+    public profile_dan?: number
   ) {}
 
   /////
@@ -147,11 +151,14 @@ export class DiveAdapter {
       item.dive_reviews.marine,
       item.dive_reviews.wreck,
       item.dive_reviews.bigfish,
-      item.number
+      item.number,
+      item.featured_picture ? MediaAdapter.adapt(item.featured_picture) : null,
+      item.pictures ? item.pictures.map((x) => MediaAdapter.adapt(x)) : null,
+      item.profile_ref
     );
   }
 
-  //keep only write data and return json object
+  //adapt model to API
   static trunc_write(data: Dive): any {
     //map visibility
     let visibility: string;
@@ -178,7 +185,7 @@ export class DiveAdapter {
     //map privacy
     const privacy = data.privacy ? 1 : 0;
 
-    //map current
+    //map current evaluation
     let current: string;
     switch (data.current) {
       case 1:
@@ -203,9 +210,9 @@ export class DiveAdapter {
     const api_dive = {
       trip_name: data.trip_name,
       user_id: data.user_id,
-      date: data.time_in,
-      //data.spot,
-      //data.buddies: Buddy[],
+      time_in: data.time_in,
+      spot: data.spot?data.spot:"",
+      buddies: data.buddies,
       divetype: data.divetype,
       temp_surface: data.temp_surface,
       altitude: data.altitude,
@@ -226,12 +233,12 @@ export class DiveAdapter {
       visibility: visibility,
       water: data.water,
       weights: data.weights,
-      dive_review: {
-        over_all: data.dive_reviews_overall,
-        difficulty: data.dive_review_difficulty,
-        marine: data.dive_review_marine,
-        wreck: data.dive_review_wreck,
-        bigfish: data.dive_review_bigfish,
+      dive_reviews: {
+        overall: data.dive_reviews_overall,
+        difficulty: data.dive_reviews_difficulty,
+        marine: data.dive_reviews_marine,
+        wreck: data.dive_reviews_wreck,
+        bigfish: data.dive_reviews_bigfish,
       },
       number: data.number,
     };

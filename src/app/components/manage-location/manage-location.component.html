@@ -1,0 +1,62 @@
+
+<!--Filed input ; launch selection on focus-->
+<ng-container [formGroup]="form_init">
+  <mat-form-field class="init_field">
+    <mat-label>Dive spot</mat-label>
+    <input matInput (focus)="this.open_overlay()"  [formControl]="spotCtrl_init" autocomplete="off" />
+  </mat-form-field>
+</ng-container>
+
+
+
+<!--TEMPLATE WITH MAP AND ACTUAL SELECTION-->
+<ng-template cdk-portal #mapOverlay="cdkPortal">
+  <mat-card class="card">
+    <div class="search" [formGroup]="form">
+      <mat-form-field class="field" appearance="outline">
+        <mat-label>Dive spot</mat-label>
+        <input
+          matInput
+          #spotInput
+          placeholder="Dive spot"
+          [formControl]="spotCtrl"
+          [matAutocomplete]="auto_spot"
+          autocomplete="off"
+          
+        />
+        <mat-autocomplete
+          #auto_spot="matAutocomplete"
+          [displayWith]="fonctionAffichage"
+          (optionSelected)="selected_auto($event)"
+        >
+
+          <mat-option *ngFor="let spot of this.searchedSpot" [value]="spot">
+            {{ spot.name }}
+          </mat-option>
+
+          <mat-option
+          [value]="'new_loc'"       
+           *ngIf="!this.new_spot" >
+            <mat-icon>add_location</mat-icon>
+            Not there ? put it on the map !
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint >{{this.msgInvalid}}</mat-hint>
+      </mat-form-field>
+      <button mat-raised-button class="valid" (click)="this.closeOverlay()"
+      [matTooltip]="this.msgInvalid"
+      matTooltipClass="tooltip-red">
+        <mat-icon>cancel</mat-icon>
+      </button>
+
+      <button mat-raised-button class="valid" (click)="this.valid_spot()" [disabled]="!this.valid">
+        <mat-icon>check</mat-icon>
+      </button>
+
+  
+    </div>
+
+    <div id="map" class="map"></div>
+  
+  </mat-card>
+</ng-template>

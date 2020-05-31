@@ -1,10 +1,20 @@
+.view {
+  height: calc(100% - 9em);
+}
+
 .container {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  max-width: 70em;
+  width: 100%;
+  margin: auto;
 }
 
 app-dive-card {
-  flex-grow: 2; /* default 0 */
   margin: 1em;
+  max-width: 40em;
+
+  /*min 50% -margin ; max 100%. break point at parent 45em*/
+  float: left;
+  min-width: calc(50% - 2em);
+  max-width: calc(100% - 2em);
+  width: calc((55em - 100%) * 55);
 }
